@@ -1,0 +1,69 @@
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import path from "path";
+import fs from "fs";
+import connectDB from "./config/db";
+
+import userRoutes    from "./routes/userRoutes";
+import productRoutes from "./routes/productRoutes";
+import orderRoutes   from "./routes/orderRoutes";
+import cartRoutes    from "./routes/cartRoutes";
+import addressRoutes from "./routes/addressRoutes";
+import { notFoundMiddleware, errorMiddleware } from "./middleware/errorMiddleware";
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 3100;
+
+// Ensure uploads directory exists (needed for local dev; Docker uses a named volume)
+fs.mkdirSync(path.join(process.cwd(), "uploads"), { recursive: true });
+
+//  Middleware 
+app.use(cors({ origin: "*", credentials: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Serve uploaded images statically
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
+//  Database 
+connectDB();
+
+//  API Routes 
+app.use("/api/user",    userRoutes);
+app.use("/api/product", productRoutes);
+app.use("/api/order",   orderRoutes);
+app.use("/api/cart",    cartRoutes);
+app.use("/api/address", addressRoutes);
+
+// Serve static files from the React app dist folder
+const clientDistPath = path.join(__dirname, "../../client/dist");
+app.use(express.static(clientDistPath));
+
+// Health check
+app.get("/api/health", (_req, res) => {
+    res.json({ success: true, message: "Grocery Delivery API is running" });
+});
+
+// For any request that doesn't match an API route, serve index.html
+app.get("*", (req, res) => {
+    if (!req.path.startsWith("/api")) {
+        res.sendFile(path.join(clientDistPath, "index.html"));
+    }
+});
+
+//  Error Handling 
+app.use(notFoundMiddleware);
+app.use(errorMiddleware);
+
+// In Vercel serverless, VERCEL=1 is injected automatically — skip listen().
+// In Docker / local dev, VERCEL is never set, so always start the HTTP server.
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
+}
+
+export default app;

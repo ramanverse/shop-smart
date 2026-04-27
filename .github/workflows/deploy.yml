@@ -16,7 +16,7 @@ env:
   AWS_REGION: us-east-1
   SERVER_ECR_REPOSITORY: shop-smart-server
   CLIENT_ECR_REPOSITORY: shop-smart-client
-  ECS_CLUSTER: shop-smart-cluster
+  ECS_CLUSTER: shop-smart-cluster-v2
   ECS_SERVICE: shop-smart-service
   SERVER_CONTAINER_NAME: server
   CLIENT_CONTAINER_NAME: client

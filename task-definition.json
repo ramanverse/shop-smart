@@ -27,7 +27,13 @@
                     "awslogs-region": "us-east-1",
                     "awslogs-stream-prefix": "server"
                 }
-            }
+            },
+            "environment": [
+                { "name": "MONGODB_URI", "value": "TOKEN_MONGODB_URI" },
+                { "name": "JWT_SECRET", "value": "TOKEN_JWT_SECRET" },
+                { "name": "PORT", "value": "3100" },
+                { "name": "NODE_ENV", "value": "production" }
+            ]
         },
         {
             "name": "client",

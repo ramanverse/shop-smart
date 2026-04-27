@@ -44,7 +44,9 @@ jobs:
 
       - name: Prepare Task Definition
         run: |
-          echo "Task definition ready"
+          sed -i "s|TOKEN_MONGODB_URI|${{ secrets.MONGODB_URI }}|g" task-definition.json
+          sed -i "s|TOKEN_JWT_SECRET|${{ secrets.JWT_SECRET }}|g" task-definition.json
+          echo "Task definition secrets injected"
 
       - name: Build, tag & push to ECR
         id: build-images

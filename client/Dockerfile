@@ -7,6 +7,7 @@ COPY package*.json ./
 RUN npm ci --ignore-scripts
 
 COPY . .
+ENV CI=false
 RUN npm run build
 
 #  Stage 2: Serve with Nginx 

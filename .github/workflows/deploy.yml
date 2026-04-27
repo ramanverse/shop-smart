@@ -26,10 +26,6 @@ jobs:
   build-and-push:
     name: Build & Push Images
     runs-on: ubuntu-latest
-    outputs:
-      server-image: ${{ steps.build-images.outputs.server-image }}
-      client-image: ${{ steps.build-images.outputs.client-image }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -94,7 +90,7 @@ jobs:
         with:
           task-definition: task-definition.json
           container-name:  ${{ env.SERVER_CONTAINER_NAME }}
-          image:           ${{ needs.build-and-push.outputs.server-image }}
+          image:           ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.SERVER_ECR_REPOSITORY }}:${{ github.sha }}
 
       - name: Render Client Image
         id: task-def-2
@@ -102,7 +98,7 @@ jobs:
         with:
           task-definition: ${{ steps.task-def-1.outputs.task-definition }}
           container-name:  ${{ env.CLIENT_CONTAINER_NAME }}
-          image:           ${{ needs.build-and-push.outputs.client-image }}
+          image:           ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.CLIENT_ECR_REPOSITORY }}:${{ github.sha }}
 
       # ── Deploy to ECS ────────────────────────────────────────
       - name: Deploy to ECS Service

@@ -4,7 +4,7 @@
     "containerDefinitions": [
         {
             "name": "server",
-            "image": "<AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/shop-smart-server:latest",
+            "image": "543453217853.dkr.ecr.us-east-1.amazonaws.com/shop-smart-server:latest",
             "essential": true,
             "portMappings": [
                 {
@@ -31,7 +31,7 @@
         },
         {
             "name": "client",
-            "image": "<AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/shop-smart-client:latest",
+            "image": "543453217853.dkr.ecr.us-east-1.amazonaws.com/shop-smart-client:latest",
             "essential": true,
             "portMappings": [
                 {
@@ -62,6 +62,6 @@
     ],
     "cpu": "512",
     "memory": "1024",
-    "executionRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/LabRole",
-    "taskRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/LabRole"
+    "executionRoleArn": "arn:aws:iam::543453217853:role/LabRole",
+    "taskRoleArn": "arn:aws:iam::543453217853:role/LabRole"
 }

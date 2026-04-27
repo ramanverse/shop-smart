@@ -42,9 +42,9 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Prepare Task Definition (Inject Account ID)
+      - name: Prepare Task Definition
         run: |
-          sed -i "s/<AWS_ACCOUNT_ID>/${{ secrets.AWS_ACCOUNT_ID }}/g" task-definition.json
+          echo "Task definition ready"
 
       - name: Build, tag & push to ECR
         id: build-images
@@ -90,7 +90,7 @@ jobs:
         with:
           task-definition: task-definition.json
           container-name:  ${{ env.SERVER_CONTAINER_NAME }}
-          image:           ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.SERVER_ECR_REPOSITORY }}:${{ github.sha }}
+          image:           543453217853.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.SERVER_ECR_REPOSITORY }}:${{ github.sha }}
 
       - name: Render Client Image
         id: task-def-2
@@ -98,7 +98,7 @@ jobs:
         with:
           task-definition: ${{ steps.task-def-1.outputs.task-definition }}
           container-name:  ${{ env.CLIENT_CONTAINER_NAME }}
-          image:           ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.CLIENT_ECR_REPOSITORY }}:${{ github.sha }}
+          image:           543453217853.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.CLIENT_ECR_REPOSITORY }}:${{ github.sha }}
 
       # ── Deploy to ECS ────────────────────────────────────────
       - name: Deploy to ECS Service

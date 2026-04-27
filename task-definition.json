@@ -65,4 +65,3 @@
     "executionRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/LabRole",
     "taskRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/LabRole"
 }
-# AWS Academy Deployment Verified

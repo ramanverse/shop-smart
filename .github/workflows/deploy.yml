@@ -42,12 +42,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Prepare Task Definition
-        run: |
-          sed -i "s|TOKEN_MONGODB_URI|${{ secrets.MONGODB_URI }}|g" task-definition.json
-          sed -i "s|TOKEN_JWT_SECRET|${{ secrets.JWT_SECRET }}|g" task-definition.json
-          echo "Task definition secrets injected"
-
       - name: Build, tag & push to ECR
         id: build-images
         env:
@@ -93,6 +87,9 @@ jobs:
           task-definition: task-definition.json
           container-name:  ${{ env.SERVER_CONTAINER_NAME }}
           image:           543453217853.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.SERVER_ECR_REPOSITORY }}:${{ github.sha }}
+          environment-variables: |
+            MONGODB_URI=${{ secrets.MONGODB_URI }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
 
       - name: Render Client Image
         id: task-def-2
